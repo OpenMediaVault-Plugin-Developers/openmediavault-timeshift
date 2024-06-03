@@ -109,22 +109,26 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             throw new \OMV\ExecException(gettext("Backup device needs to be set and applied!"));
         }
         // list snapshots
+        $output = [];
         $cmdArgs = [];
         $cmdArgs[] = 'timeshift';
         $cmdArgs[] = '--list';
+        $cmdArgs[] = "| sed '1,10d'";
+        $cmdArgs[] = '| awk NF';
         $cmd = new \OMV\System\Process($cmdArgs);
         $cmd->setQuiet(true);
         $cmd->execute($output, $exitStatus);
         array_filter($output);
         $snapshots = [];
         if (strpos(implode('', $output), 'No snapshots found') === false) {
-            $pattern = '/^\s*(\d+)\s+>\s+([\d-]+_[\d-]+)\s+([OBHDWM\s]*)\s*(.*)$/m';
-            preg_match_all($pattern, $output, $matches, PREG_SET_ORDER);
-            foreach ($matches as $match) {
+            $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)\s*(.*)$/';
+            foreach ($output as $line) {
+                $match = [];
+                preg_match($pattern, $line, $match);
                 $snapshots[] = [
                     'num' => $match[1],
-                    'name' => $match[2],
-                    'tags' => array_filter(array_map('trim', explode(' ', $match[3]))),
+                    'snapshot' => $match[2],
+                    'tags' => $match[3],
                     'description' => trim($match[4])
                 ];
             }
