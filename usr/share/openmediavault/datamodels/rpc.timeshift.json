@@ -1,0 +1,60 @@
+[
+  {
+    "type": "rpc",
+    "id": "rpc.timeshift.setsettings",
+    "params": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "required": true
+        },
+        "backupdev": {
+          "type": "string",
+          "required": true
+        },
+        "stopcronemail": {
+          "type": "boolean",
+          "required": true
+        },
+        "monthly": {
+          "type": "integer",
+          "required": true
+        },
+        "weekly": {
+          "type": "integer",
+          "required": true
+        },
+        "daily": {
+          "type": "integer",
+          "required": true
+        },
+        "hourly": {
+          "type": "integer",
+          "required": true
+        },
+        "boot": {
+          "type": "integer",
+          "required": true
+        },
+        "exclude": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  },
+  {
+    "type": "rpc",
+    "id": "rpc.timeshift.deletesnapshot",
+    "params": {
+      "type": "object",
+      "properties": {
+        "snapshot": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  }
+]

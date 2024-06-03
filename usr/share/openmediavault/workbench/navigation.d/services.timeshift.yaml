@@ -1,0 +1,7 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "services.timeshift"
+  text: _("Timeshift")
+  icon: "mdi:sort-clock-descending-outline"
+  url: "/services/timeshift"

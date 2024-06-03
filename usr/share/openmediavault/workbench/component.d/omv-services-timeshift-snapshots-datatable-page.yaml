@@ -1,0 +1,55 @@
+version: "1.0"
+type: component
+data:
+  name: omv-services-timeshift-snapshots-datatable-page
+  type: datatablePage
+  config:
+    autoReload: false
+    stateId: b12a5e7c-210f-11ef-ada4-73e8404f76b9
+    store:
+      proxy:
+        service: Timeshift
+        get:
+          method: getSnapshotList
+    columns:
+      - name: "#"
+        prop: num
+        flexGrow: 1
+        sortable: true
+      - name: _("Snapshot")
+        prop: snapshot
+        flexGrow: 1
+        sortable: true
+      - name: _("Tags")
+        prop: tags
+        flexGrow: 1
+        sortable: true
+      - name: _("Description")
+        prop: ""
+        flexGrow: 3
+    actions:
+      - type: iconButton
+        icon: add
+        tooltip: _("Create snapshot")
+        execute:
+          type: taskDialog
+          taskDialog:
+            config:
+              title: _("Creating snapshot ...")
+              startOnInit: true
+              request:
+                service: Timeshift
+                method: createSnapshot
+      - type: iconButton
+        icon: delete
+        tooltip: _("Delete snapshot")
+        execute:
+          type: request
+          request:
+            service: Timeshift
+            method: deleteSnapshot
+            params:
+              snapshot: "{{ _selected[0].snapshot }}"
+            task: true
+            progressMessage: _("Deleting snapshot ...")
+            successNotification: _("Snapshot has been deleted.")

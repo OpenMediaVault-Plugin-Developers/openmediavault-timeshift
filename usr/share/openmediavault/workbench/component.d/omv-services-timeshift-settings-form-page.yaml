@@ -1,0 +1,83 @@
+version: "1.0"
+type: component
+data:
+  name: omv-services-timeshift-settings-form-page
+  type: formPage
+  config:
+    request:
+      service: Timeshift
+      get:
+        method: getSettings
+      post:
+        method: setSettings
+    fields:
+      - type: checkbox
+        name: enable
+        label: _("Enable")
+        value: false
+      - type: select
+        name: backupdev
+        label: _("Backup device")
+        textField: description
+        valueField: uuid
+        store:
+          proxy:
+            service: Timeshift
+            get:
+              method: getBackupDeviceList
+      - type: checkbox
+        name: stopcronemail
+        label: _("Stop cron email")
+        value: false
+      - type: numberInput
+        name: monthly
+        label: _("Monthly")
+        value: 0
+        validators:
+          min: 0
+          max: 999
+          required: true
+        hint: _("Set to zero to disable")
+      - type: numberInput
+        name: weekly
+        label: _("Weekly")
+        value: 0
+        validators:
+          min: 0
+          max: 999
+          required: true
+        hint: _("Set to zero to disable")
+      - type: numberInput
+        name: daily
+        label: _("Daily")
+        value: 3
+        validators:
+          min: 0
+          max: 999
+          required: true
+        hint: _("Set to zero to disable")
+      - type: numberInput
+        name: hourly
+        label: _("hourly")
+        value: 0
+        validators:
+          min: 0
+          max: 999
+          required: true
+        hint: _("Set to zero to disable")
+      - type: numberInput
+        name: boot
+        label: _("Boot")
+        value: 0
+        validators:
+          min: 0
+          max: 999
+          required: true
+        hint: _("Set to zero to disable")
+      - type: textarea
+        name: exclude
+        label: _("Excludes")
+        value: "/srv/**\n/home/**\n/root/**"
+        rows: 5
+    buttons:
+      - template: submit

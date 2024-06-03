@@ -1,0 +1,28 @@
+{
+  "backup_device_uuid" : "{{ config.backupdev }}",
+  "parent_device_uuid" : "",
+  "do_first_run" : "false",
+  "btrfs_mode" : "false",
+  "include_btrfs_home_for_backup" : "false",
+  "include_btrfs_home_for_restore" : "false",
+  "stop_cron_emails" : "{{ 'true' if config.stopcronemail else 'false' }}",
+  "schedule_monthly" : "{{ 'true' if config.monthly > 0 else 'false' }}",
+  "schedule_weekly" : "{{ 'true' if config.weekly > 0 else 'false' }}",
+  "schedule_daily" : "{{ 'true' if config.daily > 0 else 'false' }}",
+  "schedule_hourly" : "{{ 'true' if config.hourly > 0 else 'false' }}",
+  "schedule_boot" : "{{ 'true' if config.boot > 0 else 'false' }}",
+  "count_monthly" : "{{ config.monthly }}",
+  "count_weekly" : "{{ config.weekly }}",
+  "count_daily" : "{{ config.daily }}",
+  "count_hourly" : "{{ config.hourly }}",
+  "count_boot" : "{{ config.boot }}",
+  "snapshot_size" : "{{ snapshot_size }}",
+  "snapshot_count" : "{{ snapshot_count }}",
+  "date_format" : "%Y-%m-%d %H:%M:%S",
+  "exclude" : [
+{%- set excludes = config.exclude.split(',') %}
+{%- set excludesF = excludes | map('string') | join('",\n    "') %}
+    "{{ excludesF }}"
+  ],
+  "exclude-apps" : []
+}

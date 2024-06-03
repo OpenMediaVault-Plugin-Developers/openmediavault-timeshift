@@ -1,0 +1,55 @@
+{
+  "type": "config",
+  "id": "conf.service.timeshift",
+  "title": "Timeshift",
+  "queryinfo": {
+    "xpath": "//services/timeshift",
+    "iterable": false
+  },
+  "properties": {
+    "enable": {
+      "type": "boolean",
+      "default": 0
+    },
+    "backupdev": {
+      "type": "string"
+    },
+    "stopcronemail": {
+      "type": "boolean",
+      "default": 0
+    },
+    "monthly": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999,
+      "default": 0
+    },
+    "weekly": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999,
+      "default": 0
+    },
+    "daily": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999,
+      "default": 5
+    },
+    "hourly": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999,
+      "default": 0
+    },
+    "boot": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999,
+      "default": 0
+    },
+    "exclude": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+Source: openmediavault-timeshift
+Section: net
+XB-Plugin-Section: backup
+Priority: optional
+Maintainer: OpenMediaVault Plugin Developers <plugins@omv-extras.org>
+Build-Depends: debhelper (>= 13)
+Standards-Version: 4.3.0
+Homepage: http://omv-extras.org/
+
+Package: openmediavault-timeshift
+Architecture: all
+Depends: timeshift,
+         openmediavault (>= 7.1),
+         ${misc:Depends}
+Description: openmediavault timeshift plugin
+ Timeshift for Linux is an application that provides functionality
+ similar to the System Restore feature in Windows and the Time Machine
+ tool in Mac OS.
+ .
+ Timeshift protects your system by taking incremental
+ snapshots of the file system at regular intervals. These snapshots
+ can be restored at a later date to undo all changes to the system.

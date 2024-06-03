@@ -1,0 +1,6 @@
+version: "1.0"
+type: route
+data:
+  url: "/services/timeshift/snapshots"
+  title: _("Snapshots")
+  component: omv-services-timeshift-snapshots-datatable-page
