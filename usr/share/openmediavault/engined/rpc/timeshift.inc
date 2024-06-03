@@ -32,6 +32,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $this->registerMethod("getSnapshotList");
         $this->registerMethod("createSnapshot");
         $this->registerMethod("deleteSnapshot");
+        $this->registerMethod("revertSnapshot");
     }
 
     public function getSettings($params, $context)
@@ -170,5 +171,29 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $cmd = new \OMV\System\Process($cmdArgs);
         $cmd->execute($output, $exitStatus);
         return($output);
+    }
+
+    public function revertSnapshot($params, $context)
+    {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+            use ($params) {
+                // revert to snapshot
+                $cmdArgs = [];
+                $cmdArgs[] = 'timeshift';
+                $cmdArgs[] = '--restore';
+                $cmdArgs[] = sprintf("--snapshot '%s'", $params['snapshot']);
+                $cmdArgs[] = '--scripted';
+                $cmd = new \OMV\System\Process($cmdArgs);
+                $cmd->setRedirect2to1();
+                $cmdLine = $cmd->getCommandLine();
+                if (0 !== $this->exec($cmdLine, $output, $bgOutputFilename)) {
+                    throw new \OMV\ExecException($cmdLine, $output);
+                }
+                return $output;
+
+            }
+        );
     }
 }

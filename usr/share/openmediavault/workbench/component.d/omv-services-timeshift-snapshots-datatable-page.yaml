@@ -53,3 +53,23 @@ data:
             task: true
             progressMessage: _("Deleting snapshot ...")
             successNotification: _("Snapshot has been deleted.")
+      - type: iconButton
+        icon: add
+        tooltip: _("Revert to snapshot")
+        confirmationDialogConfig:
+          template: confirmation-critical
+          message: _("Are you sure you want to revert to snapshot?")
+        enabledConstraints:
+          minSelected: 1
+          maxSelected: 1
+        execute:
+          type: taskDialog
+          taskDialog:
+            config:
+              title: _("Reverting to snapshot ...")
+              startOnInit: false
+              request:
+                service: Timeshift
+                method: revertSnapshot
+                params:
+                  snapshot: "{{ _selected[0].snapshot }}"
