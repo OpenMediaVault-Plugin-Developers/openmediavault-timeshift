@@ -21,6 +21,7 @@ data:
             service: Timeshift
             get:
               method: getBackupDeviceList
+        hint: _("Backup destination device")
       - type: checkbox
         name: stopcronemail
         label: _("Stop cron email")
@@ -75,5 +76,6 @@ data:
         label: _("Excludes")
         value: "/srv/**,/home/**,/root/**"
         rows: 5
+        hint: _("Use , or ; or new line to separate entries.  Will be converted to comma separated.<br/>Use trailing ** to match anything, including slashes.<br/>Use trailing *** will match both the directory and everything in the directory.<br/>See <a href='https://linux.die.net/man/1/rsync' target=_blank>rsync manual</a> for additional explanation of filters.")
     buttons:
       - template: submit
