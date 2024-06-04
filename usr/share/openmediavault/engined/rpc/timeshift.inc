@@ -30,6 +30,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $this->registerMethod("getBackupDeviceList");
 
         $this->registerMethod("getSnapshotList");
+        $this->registerMethod("getAltSnapshotList");
         $this->registerMethod("createSnapshot");
         $this->registerMethod("deleteSnapshot");
         $this->registerMethod("revertSnapshot");
@@ -56,7 +57,6 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $excludeT = array_map("trim", $exclude);
         $excludeF = array_filter($excludeT);
         $excludeU = array_unique($excludeF);
-        sort($excludeU);
         $params["exclude"] = implode(",", $excludeU);
         // Get the existing configuration object.
         $db = \OMV\Config\Database::getInstance();
@@ -142,13 +142,19 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
     {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
+        // Validate the parameters of the RPC service method.
+        $this->validateMethodParams($params, "rpc.timeshift.createsnapshot");
         return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
             use ($params) {
-                // delete snapshot
+                // create snapshot
                 $cmdArgs = [];
                 $cmdArgs[] = 'timeshift';
                 $cmdArgs[] = '--create';
+                $cmdArgs[] = '--comment "manually created from plugin"';
                 $cmdArgs[] = '--scripted';
+                if ($params['snapshot'] !== '') {
+                    $cmdArgs[] = sprintf("--snapshot-device '%s'", $params['device']);
+                }
                 $cmd = new \OMV\System\Process($cmdArgs);
                 $cmd->setRedirect2to1();
                 $cmdLine = $cmd->getCommandLine();
@@ -156,7 +162,6 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
                     throw new \OMV\ExecException($cmdLine, $output);
                 }
                 return $output;
-
             }
         );
     }
@@ -166,21 +171,41 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
         // Validate the parameters of the RPC service method.
-        $this->validateMethodParams($params, "rpc.timeshift.deletesnapshot");
-        // delete snapshot
-        $cmdArgs = [];
-        $cmdArgs[] = 'timeshift';
-        $cmdArgs[] = '--delete';
-        $cmdArgs[] = sprintf("--snapshot '%s'", $params['snapshot']);
-        $cmd = new \OMV\System\Process($cmdArgs);
-        $cmd->execute($output, $exitStatus);
-        return($output);
+        $this->validateMethodParams($params, "rpc.timeshift.snapshot");
+        if ($params['snapshot'] == 'create') {
+            throw new \OMV\ExecException(gettext("This entry is used to a create a snapshot only!"));
+        }
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+            use ($params) {
+                // delete snapshot
+                $cmdArgs = [];
+                $cmdArgs[] = 'timeshift';
+                $cmdArgs[] = '--delete';
+                $cmdArgs[] = '--scripted';
+                $cmdArgs[] = sprintf("--snapshot '%s'", $params['snapshot']);
+                if ($params['snapshot'] !== '') {
+                    $cmdArgs[] = sprintf("--snapshot-device '%s'", $params['device']);
+                }
+                $cmd = new \OMV\System\Process($cmdArgs);
+                $cmd->setRedirect2to1();
+                $cmdLine = $cmd->getCommandLine();
+                if (0 !== $this->exec($cmdLine, $output, $bgOutputFilename)) {
+                    throw new \OMV\ExecException($cmdLine, $output);
+                }
+                return $output;
+            }
+        );
     }
 
     public function revertSnapshot($params, $context)
     {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
+        // Validate the parameters of the RPC service method.
+        $this->validateMethodParams($params, "rpc.timeshift.snapshot");
+        if ($params['snapshot'] == 'create') {
+            throw new \OMV\ExecException(gettext("This entry is used to a create a snapshot only!"));
+        }
         return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
             use ($params) {
                 // revert to snapshot
@@ -188,6 +213,10 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
                 $cmdArgs[] = 'timeshift';
                 $cmdArgs[] = '--restore';
                 $cmdArgs[] = sprintf("--snapshot '%s'", $params['snapshot']);
+                if ($params['snapshot'] !== '') {
+                    $cmdArgs[] = sprintf("--snapshot-device '%s'", $params['device']);
+                }
+                $cmdArgs[] = '--yes';
                 $cmdArgs[] = '--scripted';
                 $cmd = new \OMV\System\Process($cmdArgs);
                 $cmd->setRedirect2to1();
@@ -196,8 +225,68 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
                     throw new \OMV\ExecException($cmdLine, $output);
                 }
                 return $output;
-
             }
         );
+    }
+
+    public function getAltSnapshotList($params, $context)
+    {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
+        // Validate the parameters of the RPC service method.
+        $this->validateMethodParams($params, "rpc.common.getlist");
+        $output = [];
+        $cmdArgs = [];
+        $cmdArgs[] = 'timeshift';
+        $cmdArgs[] = '--list-devices';
+        $cmdArgs[] = '--scripted';
+        $cmdArgs[] = "| grep '>'";
+        $cmdArgs[] = '| awk \'{ print $3 }\'';
+        $cmd = new \OMV\System\Process($cmdArgs);
+        $cmd->setQuiet(true);
+        $cmd->execute($output, $exitStatus);
+        array_filter($output);
+        // loop through all devices and get snapshots from each
+        $snapshots = [];
+        $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)\s*(.*)$/';
+        foreach ($output as $dev) {
+            $snapshots[] = [
+                'num' => '-',
+                'snapshot' => 'create',
+                'device' => $dev,
+                'tags' => '-',
+                'description' => 'use to create a snapshot on ' . $dev
+            ];
+            // list snapshots
+            $snapoutput = [];
+            $cmdArgs = [];
+            $cmdArgs[] = 'timeshift';
+            $cmdArgs[] = '--list';
+            $cmdArgs[] = sprintf("--snapshot-device '%s'", $dev);
+            $cmdArgs[] = '--scripted';
+            $cmdArgs[] = "| sed '1,8d'";
+            $cmdArgs[] = '| awk NF';
+            $cmd = new \OMV\System\Process($cmdArgs);
+            $cmd->setQuiet(true);
+            $cmd->execute($snapoutput, $exitStatus);
+            array_filter($snapoutput);
+            if (strpos(implode('', $snapoutput), 'No snapshots found') === false) {
+                foreach ($snapoutput as $line) {
+                    $match = [];
+                    if (preg_match($pattern, $line, $match) === false) continue;
+                    if (strlen($match[2]) == 0) continue;
+                    $snapshots[] = [
+                        'num' => $match[1],
+                        'snapshot' => $match[2],
+                        'device' => $dev,
+                        'tags' => $match[3],
+                        'description' => trim($match[4])
+                    ];
+                }
+            }
+        }
+        // Filter the result.
+        return $this->applyFilter($snapshots, $params['start'], $params['limit'],
+            $params['sortfield'], $params['sortdir']);
     }
 }

@@ -5,10 +5,6 @@
     "params": {
       "type": "object",
       "properties": {
-        "enable": {
-          "type": "boolean",
-          "required": true
-        },
         "backupdev": {
           "type": "string",
           "required": true
@@ -46,11 +42,28 @@
   },
   {
     "type": "rpc",
-    "id": "rpc.timeshift.deletesnapshot",
+    "id": "rpc.timeshift.createsnapshot",
+    "params": {
+      "type": "object",
+      "properties": {
+        "device": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  },
+  {
+    "type": "rpc",
+    "id": "rpc.timeshift.snapshot",
     "params": {
       "type": "object",
       "properties": {
         "snapshot": {
+          "type": "string",
+          "required": true
+        },
+        "device": {
           "type": "string",
           "required": true
         }

@@ -1,20 +1,24 @@
 version: "1.0"
 type: component
 data:
-  name: omv-services-timeshift-snapshots-datatable-page
+  name: omv-services-timeshift-altsnapshots-datatable-page
   type: datatablePage
   config:
     autoReload: false
     hasSearchField: true
-    stateId: b12a5e7c-210f-11ef-ada4-73e8404f76b9
+    stateId: fa7ba318-21f2-11ef-8da0-e743f5eff14c
     store:
       proxy:
         service: Timeshift
         get:
-          method: getSnapshotList
+          method: getAltSnapshotList
     columns:
       - name: "#"
         prop: num
+        flexGrow: 1
+        sortable: true
+      - name: _("Device")
+        prop: device
         flexGrow: 1
         sortable: true
       - name: _("Snapshot")
@@ -43,7 +47,7 @@ data:
                 service: Timeshift
                 method: createSnapshot
                 params:
-                  device: ""
+                  device: "{{ _selected[0].device }}"
       - type: iconButton
         icon: delete
         tooltip: _("Delete snapshot")
@@ -53,6 +57,11 @@ data:
         enabledConstraints:
           minSelected: 1
           maxSelected: 1
+          constraint:
+            - operator: ne
+              arg0:
+                prop: snapshot
+              arg1: "create"
         execute:
           type: request
           type: taskDialog
@@ -65,7 +74,7 @@ data:
                 method: deleteSnapshot
                 params:
                   snapshot: "{{ _selected[0].snapshot }}"
-                  device: ""
+                  device: "{{ _selected[0].device }}"
       - type: iconButton
         icon: mdi:file-undo-outline
         tooltip: _("Revert to snapshot")
@@ -75,6 +84,11 @@ data:
         enabledConstraints:
           minSelected: 1
           maxSelected: 1
+          constraint:
+            - operator: ne
+              arg0:
+                prop: snapshot
+              arg1: "create"
         execute:
           type: taskDialog
           taskDialog:
@@ -86,4 +100,4 @@ data:
                 method: revertSnapshot
                 params:
                   snapshot: "{{ _selected[0].snapshot }}"
-                  device: ""
+                  device: "{{ _selected[0].device }}"

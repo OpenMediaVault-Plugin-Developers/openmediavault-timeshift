@@ -17,8 +17,6 @@
 
 {% set config = salt['omv_conf.get']('conf.service.timeshift') %}
 
-{% if config.enable | to_bool %}
-
 {% set snapshot_count = "0" %}
 {% set snapshot_size = "0" %}
 
@@ -55,11 +53,3 @@ configure_timeshift:
     - user: root
     - group: root
     - mode: 644
-
-{% else %}
-
-disable_timeshift_hourly_cron:
-  file.absent:
-    - name: /etc/cron.d/timeshift-hourly
-
-{% endif %}

@@ -7,10 +7,6 @@
     "iterable": false
   },
   "properties": {
-    "enable": {
-      "type": "boolean",
-      "default": 0
-    },
     "backupdev": {
       "type": "string"
     },

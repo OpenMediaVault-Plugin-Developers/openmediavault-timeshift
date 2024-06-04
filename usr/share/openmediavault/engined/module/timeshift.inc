@@ -18,23 +18,11 @@
  */
 
 class OMVModuleTimeshift extends \OMV\Engine\Module\ServiceAbstract
-    implements \OMV\Engine\Notify\IListener, \OMV\Engine\Module\IServiceStatus
+    implements \OMV\Engine\Notify\IListener
 {
     public function getName()
     {
         return "timeshift";
-    }
-
-    public function getStatus()
-    {
-        $db = \OMV\Config\Database::getInstance();
-        $object = $db->get("conf.service.timeshift");
-        return array(
-            "name" => $this->getName(),
-            "title" => gettext("Timeshift"),
-            "enabled" => $object->get("enable"),
-            "running" => $object->get("enable")
-        );
     }
 
     public function bindListeners(\OMV\Engine\Notify\Dispatcher $dispatcher)

@@ -11,10 +11,6 @@ data:
       post:
         method: setSettings
     fields:
-      - type: checkbox
-        name: enable
-        label: _("Enable")
-        value: false
       - type: select
         name: backupdev
         label: _("Backup device")
@@ -77,7 +73,7 @@ data:
       - type: textarea
         name: exclude
         label: _("Excludes")
-        value: "/srv/**\n/home/**\n/root/**"
+        value: "/srv/**,/home/**,/root/**"
         rows: 5
     buttons:
       - template: submit
