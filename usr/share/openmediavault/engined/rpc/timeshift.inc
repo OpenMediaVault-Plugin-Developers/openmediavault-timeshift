@@ -173,7 +173,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams($params, "rpc.timeshift.snapshot");
         if ($params['snapshot'] == 'create') {
-            throw new \OMV\ExecException(gettext("This entry is used to a create a snapshot only!"));
+            throw new \OMV\ExecException(gettext("This entry is used to create a snapshot only!"));
         }
         return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
             use ($params) {
@@ -204,7 +204,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams($params, "rpc.timeshift.snapshot");
         if ($params['snapshot'] == 'create') {
-            throw new \OMV\ExecException(gettext("This entry is used to a create a snapshot only!"));
+            throw new \OMV\ExecException(gettext("This entry is used to create a snapshot only!"));
         }
         return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
             use ($params) {
