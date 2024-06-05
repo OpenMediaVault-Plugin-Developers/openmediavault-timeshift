@@ -2,7 +2,7 @@ version: "1.0"
 type: navigation-item
 data:
   path: "services.timeshift.snapshots"
-  text: _("Snapshots")
+  text: _("Scheduled snapshots")
   position: 20
   icon: mdi:content-copy
   url: "/services/timeshift/snapshots"

@@ -2,7 +2,7 @@ version: "1.0"
 type: navigation-item
 data:
   path: "services.timeshift.altsnapshots"
-  text: _("Alt Snapshots")
+  text: _("On-demand snapshots")
   position: 30
   icon: mdi:content-duplicate
   url: "/services/timeshift/altsnapshots"
