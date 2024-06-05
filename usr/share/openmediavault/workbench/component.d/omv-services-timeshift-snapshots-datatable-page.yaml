@@ -19,7 +19,7 @@ data:
         sortable: true
       - name: _("Snapshot")
         prop: snapshot
-        flexGrow: 1
+        flexGrow: 2
         sortable: true
       - name: _("Tags")
         prop: tags
