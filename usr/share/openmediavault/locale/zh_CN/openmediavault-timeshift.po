@@ -3,13 +3,17 @@
 # This file is distributed under the same license as the openmediavault-timeshift package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# songming <by@songming.me>, 2024
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-04 16:14-0500\n"
+"POT-Creation-Date: 2024-06-05 06:05-0500\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
+"Last-Translator: songming <by@songming.me>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,82 +22,88 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Alt Snapshots"
-msgstr ""
+msgstr "Alt Snapshots"
 
 msgid "Are you sure you want to delete this snapshot?"
-msgstr ""
+msgstr "您确定要删除这个快照吗？"
 
 msgid "Are you sure you want to revert to snapshot?"
-msgstr ""
+msgstr "您确定要恢复快照吗？"
 
 msgid "Backup destination device"
-msgstr ""
+msgstr "备份目标设备"
 
 msgid "Backup device"
-msgstr ""
+msgstr "备份设备"
 
 msgid "Backup device needs to be set and applied!"
-msgstr ""
+msgstr "备份设备需要设置和应用！"
 
 msgid "Boot"
-msgstr ""
+msgstr "启动"
 
 msgid "Create snapshot"
-msgstr ""
+msgstr "创建快照"
 
 msgid "Creating snapshot ..."
-msgstr ""
+msgstr "创建快照中 ..."
 
 msgid "Daily"
-msgstr ""
+msgstr "每日"
 
 msgid "Delete snapshot"
-msgstr ""
+msgstr "删除快照"
 
 msgid "Deleting snapshot ..."
-msgstr ""
+msgstr "删除快照中 ..."
 
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 msgid "Device"
-msgstr ""
+msgstr "设备"
 
 msgid "Excludes"
-msgstr ""
+msgstr "排除"
 
 msgid "Monthly"
+msgstr "每月"
+
+msgid "On-demand snapshots"
 msgstr ""
 
 msgid "Revert to snapshot"
-msgstr ""
+msgstr "恢复快照"
 
 msgid "Reverting to snapshot ..."
+msgstr "恢复快照中 ..."
+
+msgid "Scheduled snapshots"
 msgstr ""
 
 msgid "Set to zero to disable"
-msgstr ""
+msgstr "设为0表示停用"
 
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 msgid "Snapshot"
-msgstr ""
+msgstr "快照"
 
 msgid "Snapshots"
-msgstr ""
+msgstr "快照"
 
 msgid "Stop cron email"
-msgstr ""
+msgstr "停止 cron email"
 
 msgid "Tags"
-msgstr ""
+msgstr "标签"
 
 msgid "This entry is used to a create a snapshot only!"
-msgstr ""
+msgstr "此条目仅用于创建快照！"
 
 msgid "Timeshift"
-msgstr ""
+msgstr "时移备份"
 
 msgid ""
 "Use , or ; or new line to separate entries.  Will be converted to comma "
@@ -102,9 +112,12 @@ msgid ""
 "directory.<br/>See <a href='https://linux.die.net/man/1/rsync' "
 "target=_blank>rsync manual</a> for additional explanation of filters."
 msgstr ""
+"使用 , 或 ; 或换行符来分隔条目。将转换为逗号分隔。<br/>使用后缀 ** 表示任何内容，包括斜杠。<br/>使用后缀 *** "
+"表示目录和目录中的任何内容。<br/>看<a href='https://linux.die.net/man/1/rsync' "
+"target=_blank>rsync 手册</a>查看更多过滤规则说明。"
 
 msgid "Weekly"
-msgstr ""
+msgstr "每周"
 
 msgid "hourly"
-msgstr ""
+msgstr "每小时"
