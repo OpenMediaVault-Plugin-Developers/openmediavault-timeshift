@@ -124,7 +124,8 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)(?:\s{2,}(.*))?$/';
             foreach ($output as $line) {
                 $match = [];
-                preg_match($pattern, $line, $match);
+                if (preg_match($pattern, $line, $match) === false) continue;
+                if (strlen($match[2]) == 0) continue;
                 $snapshots[] = [
                     'num' => $match[1],
                     'snapshot' => $match[2],
