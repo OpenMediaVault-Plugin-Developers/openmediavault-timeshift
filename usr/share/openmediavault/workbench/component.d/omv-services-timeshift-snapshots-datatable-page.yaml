@@ -31,20 +31,6 @@ data:
         sortable: true
     actions:
       - type: iconButton
-        icon: add
-        tooltip: _("Create snapshot")
-        execute:
-          type: taskDialog
-          taskDialog:
-            config:
-              title: _("Creating snapshot ...")
-              startOnInit: true
-              request:
-                service: Timeshift
-                method: createSnapshot
-                params:
-                  device: ""
-      - type: iconButton
         icon: delete
         tooltip: _("Delete snapshot")
         confirmationDialogConfig:
