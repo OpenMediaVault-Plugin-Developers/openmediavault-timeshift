@@ -121,7 +121,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         array_filter($output);
         $snapshots = [];
         if (strpos(implode('', $output), 'No snapshots found') === false) {
-            $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)\s*(.*)$/';
+            $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)(?:\s{2,}(.*))?$/';
             foreach ($output as $line) {
                 $match = [];
                 preg_match($pattern, $line, $match);
@@ -248,7 +248,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         array_filter($output);
         // loop through all devices and get snapshots from each
         $snapshots = [];
-        $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)\s*(.*)$/';
+        $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)(?:\s{2,}(.*))?$/';
         foreach ($output as $dev) {
             $snapshots[] = [
                 'num' => '-',
