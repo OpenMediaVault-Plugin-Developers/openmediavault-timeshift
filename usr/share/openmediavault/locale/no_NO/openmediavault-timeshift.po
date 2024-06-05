@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 06:05-0500\n"
+"POT-Creation-Date: 2024-06-05 10:00-0500\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
 "Language-Team: Norwegian (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/no/)\n"
 "MIME-Version: 1.0\n"
@@ -96,6 +96,9 @@ msgid "Tags"
 msgstr ""
 
 msgid "This entry is used to a create a snapshot only!"
+msgstr ""
+
+msgid "This entry is used to create a snapshot only!"
 msgstr ""
 
 msgid "Timeshift"

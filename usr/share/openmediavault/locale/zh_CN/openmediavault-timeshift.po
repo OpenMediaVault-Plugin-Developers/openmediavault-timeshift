@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 06:05-0500\n"
+"POT-Creation-Date: 2024-06-05 10:00-0500\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
 "Last-Translator: songming <by@songming.me>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/zh_CN/)\n"
@@ -101,6 +101,9 @@ msgstr "标签"
 
 msgid "This entry is used to a create a snapshot only!"
 msgstr "此条目仅用于创建快照！"
+
+msgid "This entry is used to create a snapshot only!"
+msgstr ""
 
 msgid "Timeshift"
 msgstr "时移备份"
