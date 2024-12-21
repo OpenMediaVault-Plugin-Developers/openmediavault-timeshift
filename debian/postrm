@@ -6,6 +6,8 @@ set -e
 . /usr/share/openmediavault/scripts/helper-functions
 
 remove_action() {
+    rm -f /etc/cron.d/timeshift-boot
+    rm -f /etc/cron.d/timeshift-hourly
     dpkg-trigger update-workbench
 }
 
