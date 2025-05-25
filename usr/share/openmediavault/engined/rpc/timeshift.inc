@@ -80,7 +80,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $cmd = new \OMV\System\Process($cmdArgs);
         $cmd->setQuiet(true);
         $cmd->execute($output, $exitStatus);
-        array_filter($output);
+        $output = array_filter($output);
         $filesystems = [];
         foreach ($output as $fs) {
             $details = explode(',', $fs);
@@ -118,7 +118,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $cmd = new \OMV\System\Process($cmdArgs);
         $cmd->setQuiet(true);
         $cmd->execute($output, $exitStatus);
-        array_filter($output);
+        $output = array_filter($output);
         $snapshots = [];
         if (strpos(implode('', $output), 'No snapshots found') === false) {
             $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)(?:\s{2,}(.*))?$/';
@@ -246,7 +246,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $cmd = new \OMV\System\Process($cmdArgs);
         $cmd->setQuiet(true);
         $cmd->execute($output, $exitStatus);
-        array_filter($output);
+        $output = array_filter($output);
         // loop through all devices and get snapshots from each
         $snapshots = [];
         $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)(?:\s{2,}(.*))?$/';
@@ -270,7 +270,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             $cmd = new \OMV\System\Process($cmdArgs);
             $cmd->setQuiet(true);
             $cmd->execute($snapoutput, $exitStatus);
-            array_filter($snapoutput);
+            $snapoutput = array_filter($snapoutput);
             if (strpos(implode('', $snapoutput), 'No snapshots found') === false) {
                 foreach ($snapoutput as $line) {
                     $match = [];
