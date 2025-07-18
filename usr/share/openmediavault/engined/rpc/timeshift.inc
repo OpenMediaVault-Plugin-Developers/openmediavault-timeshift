@@ -74,22 +74,46 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         // list backup devices
         $cmdArgs = [];
         $cmdArgs[] = 'blkid';
-        $cmdArgs[] = '| grep -vE "zfs|swap"';
-        $cmdArgs[] = '| awk -F \': |="|"\' \'{print $1","$3}\'';
-        $cmdArgs[] = '| sort';
+        $cmdArgs[] = '-o export';
         $cmd = new \OMV\System\Process($cmdArgs);
         $cmd->setQuiet(true);
         $cmd->execute($output, $exitStatus);
-        $output = array_filter($output);
+        $output[] = '';
+        // build return list filtering out bad filesystems
+        $badfs = ['zfs_member', 'swap', 'LVM2_member', 'vfat'];
         $filesystems = [];
-        foreach ($output as $fs) {
-            $details = explode(',', $fs);
-            $filesystems[] = [
-                'uuid' => $details[1],
-                'description' => sprintf('%s [%s]', $details[0], $details[1])
-            ];
+        $devname = $uuid = $fstype = null;
+        foreach ($output as $line) {
+            if (trim($line) === '') {
+                if (in_array($fstype, $badfs, true) || strpos($devname, '/dev/zram') === 0)
+                    continue;
+                if ($devname !== null && $uuid !== null) {
+                    $filesystems[] = [
+                        'uuid' => $uuid,
+                        'devname' => $devname,
+                        'description' => sprintf('%s [%s]', $devname, $uuid),
+                    ];
+                }
+                $devname = $uuid = $fstype = null;
+                continue;
+            }
+            list($key, $value) = explode('=', $line, 2);
+            switch ($key) {
+                case 'DEVNAME':
+                    $devname = $value;
+                    break;
+                case 'UUID':
+                    $uuid = $value;
+                    break;
+                case 'TYPE':
+                    $fstype = $value;
+                    break;
+            }
         }
-        // Filter the result.
+        // sort and return the result
+        usort($filesystems, static function(array $a, array $b): int {
+            return strcmp($a['devname'], $b['devname']);
+        });
         return ($filesystems);
     }
 
