@@ -10,7 +10,7 @@ Homepage: http://omv-extras.org/
 Package: openmediavault-timeshift
 Architecture: all
 Depends: timeshift,
-         openmediavault (>= 7.1),
+         openmediavault (>= 8),
          ${misc:Depends}
 Description: openmediavault timeshift plugin
  Timeshift for Linux is an application that provides functionality

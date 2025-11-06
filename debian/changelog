@@ -1,3 +1,9 @@
+openmediavault-timeshift (8.0) stable; urgency=low
+
+  * Update for omv 8.x
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Thu, 06 Nov 2025 22:07:40 +0000
+
 openmediavault-timeshift (7.0.1) stable; urgency=low
 
   * Fix UUID for non-OMV mounted drives
