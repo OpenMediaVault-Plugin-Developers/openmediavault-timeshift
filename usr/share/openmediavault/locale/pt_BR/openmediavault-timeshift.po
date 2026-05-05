@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 10:00-0500\n"
+"POT-Creation-Date: 2026-05-05 11:03+0000\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
 "Last-Translator: Marcelo Esteves <marcelopge@gmail.com>, 2024\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/pt_BR/)\n"
@@ -21,9 +21,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
-
-msgid "Alt Snapshots"
-msgstr "Alt Snapshots"
 
 msgid "Are you sure you want to delete this snapshot?"
 msgstr "Você tem certeza que quer apagar o snapshot?"
@@ -91,17 +88,11 @@ msgstr "Configurações"
 msgid "Snapshot"
 msgstr "Snapshot"
 
-msgid "Snapshots"
-msgstr "Snapshots"
-
 msgid "Stop cron email"
 msgstr "Parar agendamento e-mail"
 
 msgid "Tags"
 msgstr "Tags"
-
-msgid "This entry is used to a create a snapshot only!"
-msgstr "Esta entrada é usada para criar apenas um snapshot!"
 
 msgid "This entry is used to create a snapshot only!"
 msgstr "Esta entrada é usada apenas para criar um snapshot!"

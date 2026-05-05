@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 10:00-0500\n"
+"POT-Creation-Date: 2026-05-05 11:03+0000\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
 "Last-Translator: kochin <kochinc@outlook.com>, 2024\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/zh_TW/)\n"
@@ -20,9 +20,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-msgid "Alt Snapshots"
-msgstr "替代快照"
 
 msgid "Are you sure you want to delete this snapshot?"
 msgstr "您確定要刪除這個快照嗎？"
@@ -90,17 +87,11 @@ msgstr "設定"
 msgid "Snapshot"
 msgstr "快照"
 
-msgid "Snapshots"
-msgstr "快照"
-
 msgid "Stop cron email"
 msgstr "停止 cron 郵件"
 
 msgid "Tags"
 msgstr "標籤"
-
-msgid "This entry is used to a create a snapshot only!"
-msgstr "此輸入項目僅使用於建立快照！"
 
 msgid "This entry is used to create a snapshot only!"
 msgstr "此輸入項目僅使用於建立快照！"
