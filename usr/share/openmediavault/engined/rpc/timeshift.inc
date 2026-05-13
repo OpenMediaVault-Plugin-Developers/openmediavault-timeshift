@@ -52,6 +52,21 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams($params, "rpc.timeshift.setsettings");
+        // validate btrfs prerequisites when btrfs mode is requested
+        if ($params['btrfsmode']) {
+            $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'FSTYPE', '/']);
+            $cmd->setQuiet(true);
+            $cmd->execute($output, $exitStatus);
+            if (trim(implode('', $output)) !== 'btrfs') {
+                throw new \OMV\Exception(gettext("BTRFS mode requires the root filesystem (/) to be formatted as BTRFS."));
+            }
+            $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'OPTIONS', '/']);
+            $cmd->setQuiet(true);
+            $cmd->execute($output, $exitStatus);
+            if (!preg_match('/(^|,)subvol=\/@(,|$)/', implode('', $output))) {
+                throw new \OMV\Exception(gettext("BTRFS mode requires the root filesystem to be mounted as the '@' subvolume (subvol=/@)."));
+            }
+        }
         // cleanup exclude list
         $exclude = explode(",", str_replace([";", PHP_EOL], ",", $params["exclude"]));
         $excludeT = array_map("trim", $exclude);
@@ -91,7 +106,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
                     $filesystems[] = [
                         'uuid' => $uuid,
                         'devname' => $devname,
-                        'description' => sprintf('%s [%s]', $devname, $uuid),
+                        'description' => sprintf('%s [%s] (%s)', $devname, $uuid, $fstype ?? 'unknown'),
                     ];
                 }
                 $devname = $uuid = $fstype = null;

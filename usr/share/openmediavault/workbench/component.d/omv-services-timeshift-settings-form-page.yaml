@@ -23,6 +23,11 @@ data:
               method: getBackupDeviceList
         hint: _("Backup destination device")
       - type: checkbox
+        name: btrfsmode
+        label: _("BTRFS mode")
+        value: false
+        hint: _("Enable when the OS root filesystem (/) is BTRFS and you want native BTRFS snapshots stored on that same device. For protection against OS drive failure, leave this disabled and use a separate backup device with RSYNC mode.")
+      - type: checkbox
         name: stopcronemail
         label: _("Stop cron email")
         value: false
@@ -76,6 +81,6 @@ data:
         label: _("Excludes")
         value: "/srv/**,/home/**,/root/**"
         rows: 5
-        hint: _("Use , or ; or new line to separate entries.  Will be converted to comma separated.<br/>Use trailing ** to match anything, including slashes.<br/>Use trailing *** will match both the directory and everything in the directory.<br/>See <a href='https://linux.die.net/man/1/rsync' target=_blank>rsync manual</a> for additional explanation of filters.")
+        hint: _("Use , or ; or new line to separate entries.  Will be converted to comma separated.<br/>Use trailing ** to match anything, including slashes.<br/>Use trailing *** will match both the directory and everything in the directory.<br/>See <a href='https://linux.die.net/man/1/rsync' target=_blank>rsync manual</a> for additional explanation of filters.<br/>Excludes are ignored in BTRFS mode.")
     buttons:
       - template: submit

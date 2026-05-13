@@ -1,3 +1,11 @@
+openmediavault-timeshift (8.1) stable; urgency=low
+
+  * Add BTRFS mode support with explicit checkbox and prerequisite validation
+  * Show filesystem type in backup device selector
+  * Auto-detect @home subvolume for include_btrfs_home settings
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Tue, 05 May 2026 14:51:16 +0000
+
 openmediavault-timeshift (8.0) stable; urgency=low
 
   * Update for omv 8.x

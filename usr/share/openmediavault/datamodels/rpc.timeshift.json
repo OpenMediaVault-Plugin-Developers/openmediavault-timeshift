@@ -36,6 +36,10 @@
         "exclude": {
           "type": "string",
           "required": true
+        },
+        "btrfsmode": {
+          "type": "boolean",
+          "required": true
         }
       }
     }

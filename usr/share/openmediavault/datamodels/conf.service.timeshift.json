@@ -46,6 +46,10 @@
     },
     "exclude": {
       "type": "string"
+    },
+    "btrfsmode": {
+      "type": "boolean",
+      "default": 0
     }
   }
 }

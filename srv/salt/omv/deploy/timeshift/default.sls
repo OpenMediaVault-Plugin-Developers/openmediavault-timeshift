@@ -20,6 +20,13 @@
 {% set snapshot_count = "0" %}
 {% set snapshot_size = "0" %}
 
+{% set btrfs_mode = config.btrfsmode | to_bool %}
+{% set btrfs_home = false %}
+{% if btrfs_mode %}
+{% set home_opts = salt['cmd.run']('findmnt -n -o OPTIONS /home 2>/dev/null') | trim %}
+{% set btrfs_home = home_opts | regex_search('(^|,)subvol=/@home(,|$)') %}
+{% endif %}
+
 {% set cfg_file = '/etc/timeshift/timeshift.json' %}
 {% set exists = salt['file.file_exists'](cfg_file) %}
 
@@ -50,6 +57,8 @@ configure_timeshift:
         config: {{ config | json }}
         snapshot_count: {{ snapshot_count }}
         snapshot_size: {{ snapshot_size }}
+        btrfs_mode: {{ btrfs_mode }}
+        btrfs_home: {{ btrfs_home }}
     - user: root
     - group: root
     - mode: 644
