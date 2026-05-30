@@ -61,4 +61,4 @@ configure_timeshift:
         btrfs_home: {{ btrfs_home }}
     - user: root
     - group: root
-    - mode: 644
+    - mode: '0644'
