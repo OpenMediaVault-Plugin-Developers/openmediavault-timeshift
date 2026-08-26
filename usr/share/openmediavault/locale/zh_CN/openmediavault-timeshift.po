@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# songming <by@songming.me>, 2024
+# songming <by@songming.me>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-31 01:30+0000\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
-"Last-Translator: songming <by@songming.me>, 2024\n"
+"Last-Translator: songming <by@songming.me>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,15 +28,15 @@ msgid "Are you sure you want to revert to snapshot?"
 msgstr "您确定要恢复快照吗？"
 
 msgid "BTRFS mode"
-msgstr ""
+msgstr "BTRFS 模式"
 
 msgid "BTRFS mode requires the root filesystem (/) to be formatted as BTRFS."
-msgstr ""
+msgstr "BTRFS 模式要求根文件系统 (/) 格式化为 BTRFS。"
 
 msgid ""
 "BTRFS mode requires the root filesystem to be mounted as the '@' subvolume "
 "(subvol=/@)."
-msgstr ""
+msgstr "BTRFS 模式要求将根文件系统挂载为 ‘@’ 子卷（subvol=/@）。"
 
 msgid "Backup destination device"
 msgstr "备份目标设备"
@@ -77,6 +77,8 @@ msgid ""
 "failure, leave this disabled and use a separate backup device with RSYNC "
 "mode."
 msgstr ""
+"当操作系统根文件系统 (/) 为 BTRFS 且您希望将原生的 BTRFS "
+"快照存储在同一设备上时，请启用此选项。若要防范操作系统驱动器故障，请保持此选项禁用，并改用独立的备份设备配合 RSYNC 模式。"
 
 msgid "Excludes"
 msgstr "排除"
@@ -125,6 +127,10 @@ msgid ""
 "target=_blank>rsync manual</a> for additional explanation of "
 "filters.<br/>Excludes are ignored in BTRFS mode."
 msgstr ""
+"使用逗号 , 、 ; 或换行符来分隔条目；最终将转换为以逗号分隔的格式。<br/>在末尾使用 ** 可匹配任意内容（包括斜杠）；<br/>在末尾使用 "
+"*** 则可匹配目录本身及该目录下的所有内容。有关过滤规则的更多说明，<br/>请参阅<a "
+"href='https://linux.die.net/man/1/rsync' target=_blank> rsync 手册</a>。<br/>在 "
+"BTRFS 模式下，排除规则将被忽略。"
 
 msgid "Weekly"
 msgstr "每周"

@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Andi Chandler <andi@gowling.com>, 2024
+# Andi Chandler <andi@gowling.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-31 01:30+0000\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
-"Last-Translator: Andi Chandler <andi@gowling.com>, 2024\n"
+"Last-Translator: Andi Chandler <andi@gowling.com>, 2026\n"
 "Language-Team: English (United Kingdom) (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,15 +28,17 @@ msgid "Are you sure you want to revert to snapshot?"
 msgstr "Are you sure you want to revert to snapshot?"
 
 msgid "BTRFS mode"
-msgstr ""
+msgstr "BTRFS mode"
 
 msgid "BTRFS mode requires the root filesystem (/) to be formatted as BTRFS."
-msgstr ""
+msgstr "BTRFS mode requires the root filesystem (/) to be formatted as BTRFS."
 
 msgid ""
 "BTRFS mode requires the root filesystem to be mounted as the '@' subvolume "
 "(subvol=/@)."
 msgstr ""
+"BTRFS mode requires the root filesystem to be mounted as the '@' subvolume "
+"(subvol=/@)."
 
 msgid "Backup destination device"
 msgstr "Backup destination device"
@@ -77,6 +79,10 @@ msgid ""
 "failure, leave this disabled and use a separate backup device with RSYNC "
 "mode."
 msgstr ""
+"Enable when the OS root filesystem (/) is BTRFS and you want native BTRFS "
+"snapshots stored on that same device. For protection against OS drive "
+"failure, leave this disabled and use a separate backup device with RSYNC "
+"mode."
 
 msgid "Excludes"
 msgstr "Excludes"
@@ -125,6 +131,12 @@ msgid ""
 "target=_blank>rsync manual</a> for additional explanation of "
 "filters.<br/>Excludes are ignored in BTRFS mode."
 msgstr ""
+"Use , or ; or new line to separate entries.  Will be converted to comma "
+"separated.<br/>Use trailing ** to match anything, including slashes.<br/>Use"
+" trailing *** will match both the directory and everything in the "
+"directory.<br/>See <a href='https://linux.die.net/man/1/rsync' "
+"target=_blank>rsync manual</a> for additional explanation of "
+"filters.<br/>Excludes are ignored in BTRFS mode."
 
 msgid "Weekly"
 msgstr "Weekly"
