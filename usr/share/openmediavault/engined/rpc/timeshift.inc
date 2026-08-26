@@ -138,13 +138,15 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams($params, "rpc.common.getlist");
-        // check to see if backup device is set
+        // check to see if backup device is set (not required in BTRFS mode,
+        // which uses the root filesystem's own BTRFS device)
         $cfg = '/etc/timeshift/timeshift.json';
         if (!file_exists($cfg)) {
             throw new \OMV\ExecException(gettext("Backup device needs to be set and applied!"));
         }
         $data = json_decode(file_get_contents($cfg), true);
-        if (!isset($data['backup_device_uuid']) || empty($data['backup_device_uuid'])) {
+        $btrfsMode = isset($data['btrfs_mode']) && $data['btrfs_mode'] === 'true';
+        if (!$btrfsMode && (!isset($data['backup_device_uuid']) || empty($data['backup_device_uuid']))) {
             throw new \OMV\ExecException(gettext("Backup device needs to be set and applied!"));
         }
         // list snapshots
@@ -286,6 +288,23 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $cmd->setQuiet(true);
         $cmd->execute($output, $exitStatus);
         $output = array_filter($output);
+        // in BTRFS mode only the device holding the root filesystem can be
+        // used for snapshots, so restrict the device list to that device
+        $cfg = '/etc/timeshift/timeshift.json';
+        if (file_exists($cfg)) {
+            $data = json_decode(file_get_contents($cfg), true);
+            if (isset($data['btrfs_mode']) && $data['btrfs_mode'] === 'true') {
+                $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'SOURCE', '/']);
+                $cmd->setQuiet(true);
+                $cmd->execute($rootOutput, $rootExitStatus);
+                $rootDevice = trim(implode('', $rootOutput));
+                $rootDeviceName = basename($rootDevice);
+                $output = array_filter($output, function($dev) use ($rootDevice, $rootDeviceName) {
+                    $dev = trim($dev);
+                    return $dev === $rootDevice || $dev === $rootDeviceName;
+                });
+            }
+        }
         // loop through all devices and get snapshots from each
         $snapshots = [];
         $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)(?:\s{2,}(.*))?$/';
