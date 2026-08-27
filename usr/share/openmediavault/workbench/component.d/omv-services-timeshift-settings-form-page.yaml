@@ -22,6 +22,12 @@ data:
             get:
               method: getBackupDeviceList
         hint: _("Backup destination device")
+        modifiers:
+          - type: disabled
+            constraint:
+              operator: truthy
+              arg0:
+                prop: btrfsmode
       - type: checkbox
         name: btrfsmode
         label: _("BTRFS mode")

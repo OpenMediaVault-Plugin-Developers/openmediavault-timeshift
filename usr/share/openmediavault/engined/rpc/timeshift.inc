@@ -66,6 +66,19 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             if (!preg_match('/(^|,)subvol=\/@(,|$)/', implode('', $output))) {
                 throw new \OMV\Exception(gettext("BTRFS mode requires the root filesystem to be mounted as the '@' subvolume (subvol=/@)."));
             }
+            // in BTRFS mode timeshift stores snapshots on the root filesystem's
+            // own device, so always store the root device's UUID as the backup
+            // device regardless of what (if anything) is selected in the form;
+            // otherwise 'backup_device_uuid' can end up empty and timeshift
+            // reports "Device: Not Selected" and lists no snapshots at all.
+            $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'UUID', '/']);
+            $cmd->setQuiet(true);
+            $cmd->execute($output, $exitStatus);
+            $rootUuid = trim(implode('', $output));
+            if ($rootUuid === '') {
+                throw new \OMV\Exception(gettext("Failed to determine the UUID of the root filesystem."));
+            }
+            $params['backupdev'] = $rootUuid;
         }
         // cleanup exclude list
         $exclude = explode(",", str_replace([";", PHP_EOL], ",", $params["exclude"]));
@@ -154,7 +167,6 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $cmdArgs = [];
         $cmdArgs[] = 'timeshift';
         $cmdArgs[] = '--list';
-        $cmdArgs[] = "| sed '1,10d'";
         $cmdArgs[] = '| awk NF';
         $cmd = new \OMV\System\Process($cmdArgs);
         $cmd->setQuiet(true);
@@ -165,7 +177,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             $pattern = '/^(\d+)\s+>\s+(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\s+([OBHDWM](?:\s*[OBHDWM])*)(?:\s{2,}(.*))?$/';
             foreach ($output as $line) {
                 $match = [];
-                if (preg_match($pattern, $line, $match) === false) continue;
+                if (preg_match($pattern, $line, $match) !== 1) continue;
                 if (strlen($match[2]) == 0) continue;
                 $snapshots[] = [
                     'num' => $match[1],
@@ -298,6 +310,10 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
                 $cmd->setQuiet(true);
                 $cmd->execute($rootOutput, $rootExitStatus);
                 $rootDevice = trim(implode('', $rootOutput));
+                // findmnt reports a subvolume mount as e.g. '/dev/sdc1[/@]';
+                // strip the bracketed subvolume suffix so it compares equal
+                // to the plain device path returned by --list-devices.
+                $rootDevice = preg_replace('/\[.*$/', '', $rootDevice);
                 $rootDeviceName = basename($rootDevice);
                 $output = array_filter($output, function($dev) use ($rootDevice, $rootDeviceName) {
                     $dev = trim($dev);
@@ -323,7 +339,6 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             $cmdArgs[] = '--list';
             $cmdArgs[] = sprintf("--snapshot-device '%s'", $dev);
             $cmdArgs[] = '--scripted';
-            $cmdArgs[] = "| sed '1,8d'";
             $cmdArgs[] = '| awk NF';
             $cmd = new \OMV\System\Process($cmdArgs);
             $cmd->setQuiet(true);
@@ -332,7 +347,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             if (strpos(implode('', $snapoutput), 'No snapshots found') === false) {
                 foreach ($snapoutput as $line) {
                     $match = [];
-                    if (preg_match($pattern, $line, $match) === false) continue;
+                    if (preg_match($pattern, $line, $match) !== 1) continue;
                     if (strlen($match[2]) == 0) continue;
                     $snapshots[] = [
                         'num' => $match[1],
