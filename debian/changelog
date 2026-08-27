@@ -1,3 +1,9 @@
+openmediavault-timeshift (8.1.2) stable; urgency=low
+
+  * Improve btrfs mode
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Thu, 27 Aug 2026 14:30:08 +0000
+
 openmediavault-timeshift (8.1.1) stable; urgency=low
 
   * When btrfs mode is enabled, the device list is now restricted
