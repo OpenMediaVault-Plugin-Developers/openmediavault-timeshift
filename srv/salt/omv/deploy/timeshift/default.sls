@@ -22,7 +22,7 @@
 
 {% set btrfs_mode = config.btrfsmode | to_bool %}
 {% set btrfs_home = false %}
-{% if btrfs_mode %}
+{% if btrfs_mode and (config.btrfshome | to_bool) %}
 {% set home_opts = salt['cmd.run']('findmnt -n -o OPTIONS /home 2>/dev/null') | trim %}
 {% set btrfs_home = home_opts | regex_search('(^|,)subvol=/@home(,|$)') %}
 {% endif %}

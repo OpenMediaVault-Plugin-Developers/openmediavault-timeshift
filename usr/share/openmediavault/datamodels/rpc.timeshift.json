@@ -40,6 +40,10 @@
         "btrfsmode": {
           "type": "boolean",
           "required": true
+        },
+        "btrfshome": {
+          "type": "boolean",
+          "required": true
         }
       }
     }

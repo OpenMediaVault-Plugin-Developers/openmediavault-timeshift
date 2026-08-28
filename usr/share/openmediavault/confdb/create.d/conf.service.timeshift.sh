@@ -17,10 +17,15 @@ if ! omv_config_exists "${xpath}"; then
   omv_config_add_key "${xpath}" "boot" "0"
   omv_config_add_key "${xpath}" "exclude" "/srv/**,/home/**,/root/**"
   omv_config_add_key "${xpath}" "btrfsmode" "0"
+  omv_config_add_key "${xpath}" "btrfshome" "0"
 fi
 
 if ! omv_config_exists "${xpath}/btrfsmode"; then
   omv_config_add_key "${xpath}" "btrfsmode" "0"
+fi
+
+if ! omv_config_exists "${xpath}/btrfshome"; then
+  omv_config_add_key "${xpath}" "btrfshome" "0"
 fi
 
 exit 0

@@ -34,6 +34,17 @@ data:
         value: false
         hint: _("Enable when the OS root filesystem (/) is BTRFS and you want native BTRFS snapshots stored on that same device. For protection against OS drive failure, leave this disabled and use a separate backup device with RSYNC mode.")
       - type: checkbox
+        name: btrfshome
+        label: _("Include @home subvolume")
+        value: false
+        hint: _("Only applies in BTRFS mode when /home is a separate @home subvolume. When enabled, @home is included in snapshots and is restored together with @. Disable to snapshot and revert only @, leaving user data in @home untouched.")
+        modifiers:
+          - type: disabled
+            constraint:
+              operator: falsy
+              arg0:
+                prop: btrfsmode
+      - type: checkbox
         name: stopcronemail
         label: _("Stop cron email")
         value: false
