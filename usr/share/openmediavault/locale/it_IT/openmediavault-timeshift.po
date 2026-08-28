@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-31 01:30+0000\n"
+"POT-Creation-Date: 2026-08-28 14:39+0000\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
 "Last-Translator: Giovanni Scafora <scafora.giovanni@gmail.com>, 2026\n"
 "Language-Team: Italian (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/it/)\n"
@@ -81,11 +81,23 @@ msgstr ""
 msgid "Excludes"
 msgstr "Esclusioni"
 
+msgid "Failed to determine the UUID of the root filesystem."
+msgstr ""
+
+msgid "Include @home subvolume"
+msgstr ""
+
 msgid "Monthly"
 msgstr "Mensile"
 
 msgid "On-demand snapshots"
 msgstr "Snapshot su richiesta"
+
+msgid ""
+"Only applies in BTRFS mode when /home is a separate @home subvolume. When "
+"enabled, @home is included in snapshots and is restored together with @. "
+"Disable to snapshot and revert only @, leaving user data in @home untouched."
+msgstr ""
 
 msgid "Revert to snapshot"
 msgstr "Ripristina snapshot"
