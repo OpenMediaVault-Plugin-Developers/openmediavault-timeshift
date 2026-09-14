@@ -195,23 +195,32 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             $params['sortfield'], $params['sortdir']);
     }
 
-    // In BTRFS mode, prefix each snapshot's description with a marker showing which
-    // subvolumes it contains: '@' when only the root subvolume was backed up,
-    // or '@@h' when '@home' was included too.
-    private function markBtrfsSubvolumes(array &$snapshots, string $path)
+    // Snapshot names (as array keys) that have an '@home' subvolume.
+    private function listBtrfsHomeSnapshots(string $path): ?array
     {
         $cmdArgs = ['btrfs', 'subvolume', 'list', $path];
         $cmd = new \OMV\System\Process($cmdArgs);
         $cmd->setQuiet(true);
         $cmd->execute($output, $exitStatus);
         if ($exitStatus !== 0) {
-            return;
+            return null;
         }
         $homeSnapshots = [];
         foreach ($output as $line) {
             if (preg_match('#\bpath\s+timeshift-btrfs/snapshots/([^/]+)/@home\s*$#', $line, $m) === 1) {
                 $homeSnapshots[$m[1]] = true;
             }
+        }
+        return $homeSnapshots;
+    }
+
+    // Prefix each snapshot's description with '@' or '@@h' to show which
+    // subvolumes it contains.
+    private function markBtrfsSubvolumes(array &$snapshots, string $path)
+    {
+        $homeSnapshots = $this->listBtrfsHomeSnapshots($path);
+        if ($homeSnapshots === null) {
+            return;
         }
         foreach ($snapshots as &$snapshot) {
             if ($snapshot['snapshot'] === 'create') continue;
@@ -290,6 +299,21 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $this->validateMethodParams($params, "rpc.timeshift.snapshot");
         if ($params['snapshot'] == 'create') {
             throw new \OMV\ExecException(gettext("This entry is used to create a snapshot only!"));
+        }
+        // refuse to restore a snapshot missing '@home' when Settings expects
+        // it, otherwise /home ends up unmountable after reboot
+        $cfg = '/etc/timeshift/timeshift.json';
+        if (file_exists($cfg)) {
+            $data = json_decode(file_get_contents($cfg), true);
+            $btrfsMode = isset($data['btrfs_mode']) && $data['btrfs_mode'] === 'true';
+            $includeHome = isset($data['include_btrfs_home_for_restore'])
+                && $data['include_btrfs_home_for_restore'] === 'true';
+            if ($btrfsMode && $includeHome) {
+                $homeSnapshots = $this->listBtrfsHomeSnapshots('/');
+                if ($homeSnapshots !== null && !isset($homeSnapshots[$params['snapshot']])) {
+                    throw new \OMV\Exception(gettext("Settings require the '@home' subvolume, but this snapshot doesn't contain it. Disable 'Include @home' in Settings or choose a different snapshot."));
+                }
+            }
         }
         return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
             use ($params) {
