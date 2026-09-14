@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 14:39+0000\n"
+"POT-Creation-Date: 2026-09-14 13:50+0000\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
 "Last-Translator: BoneNI, 2026\n"
 "Language-Team: Lao (Laos) (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/lo_LA/)\n"
@@ -113,6 +113,11 @@ msgstr "ຕັ້ງເປັນສູນເພື່ອປິດການໃຊ
 
 msgid "Settings"
 msgstr "ການຕັ້ງຄ່າ"
+
+msgid ""
+"Settings require the '@home' subvolume, but this snapshot doesn't contain "
+"it. Disable 'Include @home' in Settings or choose a different snapshot."
+msgstr ""
 
 msgid "Snapshot"
 msgstr "ສະແນັບຊັອດ"

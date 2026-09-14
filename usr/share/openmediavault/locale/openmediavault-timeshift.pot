@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 14:39+0000\n"
+"POT-Creation-Date: 2026-09-14 13:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,6 +99,9 @@ msgid "Set to zero to disable"
 msgstr ""
 
 msgid "Settings"
+msgstr ""
+
+msgid "Settings require the '@home' subvolume, but this snapshot doesn't contain it. Disable 'Include @home' in Settings or choose a different snapshot."
 msgstr ""
 
 msgid "Snapshot"
