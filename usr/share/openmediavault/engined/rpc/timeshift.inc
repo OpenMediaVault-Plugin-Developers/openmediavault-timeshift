@@ -187,9 +187,40 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
                 ];
             }
         }
+        if ($btrfsMode) {
+            $this->markBtrfsSubvolumes($snapshots, '/');
+        }
         // Filter the result.
         return $this->applyFilter($snapshots, $params['start'], $params['limit'],
             $params['sortfield'], $params['sortdir']);
+    }
+
+    // In BTRFS mode, prefix each snapshot's description with a marker showing which
+    // subvolumes it contains: '@' when only the root subvolume was backed up,
+    // or '@@h' when '@home' was included too.
+    private function markBtrfsSubvolumes(array &$snapshots, string $path)
+    {
+        $cmdArgs = ['btrfs', 'subvolume', 'list', $path];
+        $cmd = new \OMV\System\Process($cmdArgs);
+        $cmd->setQuiet(true);
+        $cmd->execute($output, $exitStatus);
+        if ($exitStatus !== 0) {
+            return;
+        }
+        $homeSnapshots = [];
+        foreach ($output as $line) {
+            if (preg_match('#\bpath\s+timeshift-btrfs/snapshots/([^/]+)/@home\s*$#', $line, $m) === 1) {
+                $homeSnapshots[$m[1]] = true;
+            }
+        }
+        foreach ($snapshots as &$snapshot) {
+            if ($snapshot['snapshot'] === 'create') continue;
+            $marker = isset($homeSnapshots[$snapshot['snapshot']]) ? '@@h' : '@';
+            $snapshot['description'] = ($snapshot['description'] !== '')
+                ? sprintf('%s - %s', $marker, $snapshot['description'])
+                : $marker;
+        }
+        unset($snapshot);
     }
 
     public function createSnapshot($params, $context)
@@ -302,10 +333,12 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $output = array_filter($output);
         // in BTRFS mode only the device holding the root filesystem can be
         // used for snapshots, so restrict the device list to that device
+        $btrfsMode = false;
         $cfg = '/etc/timeshift/timeshift.json';
         if (file_exists($cfg)) {
             $data = json_decode(file_get_contents($cfg), true);
-            if (isset($data['btrfs_mode']) && $data['btrfs_mode'] === 'true') {
+            $btrfsMode = isset($data['btrfs_mode']) && $data['btrfs_mode'] === 'true';
+            if ($btrfsMode) {
                 $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'SOURCE', '/']);
                 $cmd->setQuiet(true);
                 $cmd->execute($rootOutput, $rootExitStatus);
@@ -358,6 +391,9 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
                     ];
                 }
             }
+        }
+        if ($btrfsMode) {
+            $this->markBtrfsSubvolumes($snapshots, '/');
         }
         // Filter the result.
         return $this->applyFilter($snapshots, $params['start'], $params['limit'],
