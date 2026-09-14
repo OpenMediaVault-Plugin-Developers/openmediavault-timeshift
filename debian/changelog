@@ -1,3 +1,12 @@
+openmediavault-timeshift (8.1.4) stable; urgency=low
+
+  * Show which BTRFS subvolumes (@ or @+@home) each snapshot contains
+    in the snapshot list description
+  * Throw error if settings require @home subvolume but snapshot
+    doesn't contain it
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 14 Sep 2026 13:49:50 +0000
+
 openmediavault-timeshift (8.1.3) stable; urgency=low
 
   * Add "Include @home subvolume" option
