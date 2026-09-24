@@ -77,7 +77,7 @@ data:
         hint: _("Set to zero to disable")
       - type: numberInput
         name: hourly
-        label: _("hourly")
+        label: _("Hourly")
         value: 0
         validators:
           min: 0
