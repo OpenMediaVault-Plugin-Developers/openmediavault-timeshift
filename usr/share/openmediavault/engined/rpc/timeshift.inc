@@ -54,24 +54,34 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
         $this->validateMethodParams($params, "rpc.timeshift.setsettings");
         // validate btrfs prerequisites when btrfs mode is requested
         if ($params['btrfsmode']) {
+            $output = [];
             $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'FSTYPE', '/']);
             $cmd->setQuiet(true);
             $cmd->execute($output, $exitStatus);
             if (trim(implode('', $output)) !== 'btrfs') {
                 throw new \OMV\Exception(gettext("BTRFS mode requires the root filesystem (/) to be formatted as BTRFS."));
             }
+            $output = [];
             $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'OPTIONS', '/']);
             $cmd->setQuiet(true);
             $cmd->execute($output, $exitStatus);
             if (!preg_match('/(^|,)subvol=\/@(,|$)/', implode('', $output))) {
-                throw new \OMV\Exception(gettext("BTRFS mode requires the root filesystem to be mounted as the '@' subvolume (subvol=/@)."));
+                throw new \OMV\Exception(gettext("BTRFS mode requires the root filesystem to be mounted as the '@' subvolume (subvol=@ or subvol=/@ in /etc/fstab)."));
+            }
+            $output = [];
+            $cmd = new \OMV\System\Process(['btrfs', 'subvolume', 'get-default', '/']);
+            $cmd->setQuiet(true);
+            $cmd->execute($output, $exitStatus);
+            if ($exitStatus !== 0 || !preg_match('/^ID 5\b/', trim(implode('', $output)))) {
+                throw new \OMV\Exception(gettext("BTRFS mode requires the default subvolume to be the top level (ID 5). Run 'btrfs subvolume set-default 5 /' and try again."));
             }
             // in BTRFS mode timeshift stores snapshots on the root filesystem's
             // own device, so always store the root device's UUID as the backup
             // device regardless of what (if anything) is selected in the form;
             // otherwise 'backup_device_uuid' can end up empty and timeshift
             // reports "Device: Not Selected" and lists no snapshots at all.
-            $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'UUID', '/']);
+            $output = [];
+            $cmd =new \OMV\System\Process(['findmnt', '-n', '-o', 'UUID', '/']);
             $cmd->setQuiet(true);
             $cmd->execute($output, $exitStatus);
             $rootUuid = trim(implode('', $output));
