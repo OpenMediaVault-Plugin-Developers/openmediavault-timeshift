@@ -81,7 +81,7 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
             // otherwise 'backup_device_uuid' can end up empty and timeshift
             // reports "Device: Not Selected" and lists no snapshots at all.
             $output = [];
-            $cmd =new \OMV\System\Process(['findmnt', '-n', '-o', 'UUID', '/']);
+            $cmd = new \OMV\System\Process(['findmnt', '-n', '-o', 'UUID', '/']);
             $cmd->setQuiet(true);
             $cmd->execute($output, $exitStatus);
             $rootUuid = trim(implode('', $output));
