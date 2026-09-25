@@ -1,3 +1,10 @@
+openmediavault-timeshift (8.1.6) stable; urgency=low
+
+  * Repair backup device UUID corrupted by BTRFS mode in 8.1.2-8.1.4
+  * Always use root filesystem UUID as backup device in BTRFS mode
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Fri, 25 Sep 2026 10:54:51 +0000
+
 openmediavault-timeshift (8.1.5) stable; urgency=low
 
   * Require BTRFS default subvolume ID 5
