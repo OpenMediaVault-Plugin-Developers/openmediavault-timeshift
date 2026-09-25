@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-timeshift\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 00:19+0000\n"
+"POT-Creation-Date: 2026-09-24 10:42+0000\n"
 "PO-Revision-Date: 2024-06-04 21:16+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>, 2024\n"
 "Language-Team: German (https://app.transifex.com/openmediavault-plugin-developers/teams/1854/de/)\n"
@@ -89,6 +89,9 @@ msgstr "Ausgeschlossen sind"
 msgid "Failed to determine the UUID of the root filesystem."
 msgstr ""
 
+msgid "Hourly"
+msgstr ""
+
 msgid "Include @home subvolume"
 msgstr ""
 
@@ -151,6 +154,3 @@ msgstr ""
 
 msgid "Weekly"
 msgstr "Wöchentlich"
-
-msgid "hourly"
-msgstr "Stündlich"
