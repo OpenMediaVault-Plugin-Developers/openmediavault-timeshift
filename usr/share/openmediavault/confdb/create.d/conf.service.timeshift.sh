@@ -28,4 +28,16 @@ if ! omv_config_exists "${xpath}/btrfshome"; then
   omv_config_add_key "${xpath}" "btrfshome" "0"
 fi
 
+# fix backupdev
+if [ "$(omv_config_get "${xpath}/btrfsmode")" = "1" ]; then
+  case "$(omv_config_get "${xpath}/backupdev")" in
+    *,*|"")
+      rootuuid="$(findmnt -n -o UUID / || :)"
+      if [ -n "${rootuuid}" ]; then
+        omv_config_update "${xpath}/backupdev" "${rootuuid}"
+      fi
+      ;;
+  esac
+fi
+
 exit 0

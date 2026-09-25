@@ -22,6 +22,11 @@
 
 {% set btrfs_mode = config.btrfsmode | to_bool %}
 {% set btrfs_home = false %}
+{% set backupdev = config.backupdev %}
+{% if btrfs_mode %}
+# btrfs snapshots always live on the root device
+{% set backupdev = salt['cmd.run']('findmnt -n -o UUID /') | trim %}
+{% endif %}
 {% if btrfs_mode and (config.btrfshome | to_bool) %}
 {% set home_opts = salt['cmd.run']('findmnt -n -o OPTIONS /home 2>/dev/null') | trim %}
 {% set btrfs_home = home_opts | regex_search('(^|,)subvol=/@home(,|$)') %}
@@ -57,6 +62,7 @@ configure_timeshift:
         config: {{ config | json }}
         snapshot_count: {{ snapshot_count }}
         snapshot_size: {{ snapshot_size }}
+        backupdev: "{{ backupdev }}"
         btrfs_mode: {{ btrfs_mode }}
         btrfs_home: {{ btrfs_home }}
     - user: root
