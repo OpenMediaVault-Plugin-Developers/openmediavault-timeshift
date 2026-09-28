@@ -109,50 +109,28 @@ class OMVRpcServiceTimeshift extends \OMV\Rpc\ServiceAbstract
     {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
-        // list backup devices
-        $cmdArgs = [];
-        $cmdArgs[] = 'blkid';
-        $cmdArgs[] = '-o export';
-        $cmd = new \OMV\System\Process($cmdArgs);
-        $cmd->setQuiet(true);
-        $cmd->execute($output, $exitStatus);
-        $output[] = '';
-        // build return list filtering out bad filesystems
-        $badfs = ['zfs_member', 'swap', 'LVM2_member', 'vfat'];
+        // timeshift rsync mode needs a linux filesystem with hardlink support
+        $goodfs = ['ext2', 'ext3', 'ext4', 'btrfs', 'xfs', 'f2fs', 'jfs', 'reiserfs'];
         $filesystems = [];
-        $devname = $uuid = $fstype = null;
-        foreach ($output as $line) {
-            if (trim($line) === '') {
-                if (in_array($fstype, $badfs, true) || strpos($devname, '/dev/zram') === 0)
-                    continue;
-                if ($devname !== null && $uuid !== null) {
-                    $filesystems[] = [
-                        'uuid' => $uuid,
-                        'devname' => $devname,
-                        'description' => sprintf('%s [%s] (%s)', $devname, $uuid, $fstype ?? 'unknown'),
-                    ];
-                }
-                $devname = $uuid = $fstype = null;
+        foreach (\OMV\System\Filesystem\Filesystem::getFilesystems() as $fs) {
+            if (!in_array($fs->getType(), $goodfs, true) || !$fs->hasUuid())
                 continue;
-            }
-            list($key, $value) = explode('=', $line, 2);
-            switch ($key) {
-                case 'DEVNAME':
-                    $devname = $value;
-                    break;
-                case 'UUID':
-                    $uuid = $value;
-                    break;
-                case 'TYPE':
-                    $fstype = $value;
-                    break;
-            }
+            $uuid = $fs->getUuid();
+            // OMV already dedupes multi-device btrfs; guard anyway
+            if (isset($filesystems[$uuid]))
+                continue;
+            $filesystems[$uuid] = [
+                'uuid' => $uuid,
+                'devname' => $fs->getCanonicalDeviceFile(),
+                'description' => $fs->getDescription(),
+            ];
         }
         // sort and return the result
+        $filesystems = array_values($filesystems);
         usort($filesystems, static function(array $a, array $b): int {
-            return strcmp($a['devname'], $b['devname']);
+            return strnatcmp($a['devname'], $b['devname']);
         });
-        return ($filesystems);
+        return $filesystems;
     }
 
     public function getSnapshotList($params, $context)
